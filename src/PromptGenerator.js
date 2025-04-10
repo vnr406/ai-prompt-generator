@@ -14,6 +14,7 @@ const options = {
 
 export default function PromptGenerator() {
   const [prompt, setPrompt] = useState("");
+  const [customPrompt, setCustomPrompt] = useState("");
   const [isPro, setIsPro] = useState(false);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
@@ -30,12 +31,18 @@ export default function PromptGenerator() {
   }, []);
 
   const generatePrompt = () => {
-    const finalPrompt = Object.values(selected).filter(Boolean).join(", ");
+    const selections = Object.values(selected).filter(Boolean).join(", ");
+    const finalPrompt = customPrompt ? `${customPrompt}, ${selections}` : selections;
     setPrompt(finalPrompt);
   };
 
   const handleChange = (key, value) => {
     setSelected(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(prompt);
+    alert("Prompt copied to clipboard!");
   };
 
   const renderSelect = (label, key, values, locked = false) => {
@@ -80,12 +87,20 @@ export default function PromptGenerator() {
       <div className="mb-6 p-4 bg-gray-800 rounded text-sm text-gray-300">
         <p><strong>How to use:</strong></p>
         <ol className="list-decimal list-inside mt-2 space-y-1">
-          <li>Select options from the dropdowns</li>
-          <li>Click "Generate Prompt"</li>
-          <li>Copy and paste your prompt into Midjourney, Leonardo, etc.</li>
+          <li>Optionally type a custom idea below</li>
+          <li>Select dropdown values</li>
+          <li>Click "Generate Prompt" then "Copy Prompt"</li>
         </ol>
         <p className="mt-2 italic text-gray-400">Tip: Combine cinematic and glitch styles for unique visuals.</p>
       </div>
+
+      <input
+        type="text"
+        className="w-full mb-6 p-2 bg-gray-800 border border-gray-600 rounded text-white"
+        placeholder="Enter your own base prompt (optional)"
+        value={customPrompt}
+        onChange={(e) => setCustomPrompt(e.target.value)}
+      />
 
       {!isPro && (
         <div className="mb-6 p-4 bg-yellow-900 text-yellow-300 rounded text-sm text-center">
@@ -116,7 +131,8 @@ export default function PromptGenerator() {
       {typeof prompt === 'string' && prompt.length > 0 && (
         <div className="mt-6 p-4 bg-gray-800 border border-gray-700 rounded">
           <strong>Prompt:</strong>
-          <pre className="mt-2 whitespace-pre-wrap">{prompt}</pre>
+          <pre className="mt-2 whitespace-pre-wrap text-white">{prompt}</pre>
+          <button onClick={handleCopy} className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">📋 Copy Prompt</button>
         </div>
       )}
 
@@ -141,4 +157,3 @@ export default function PromptGenerator() {
     </div>
   );
 }
-
