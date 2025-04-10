@@ -62,7 +62,7 @@ export default function PromptGenerator() {
   };
 
   const handleUnlock = () => {
-    if (enteredCode.trim().toLowerCase() === "prounlock799") {
+    if (enteredCode.trim().toLowerCase() === "unlock-pro-799") {
       localStorage.setItem("proUser", "true");
       setIsPro(true);
       setShowUnlockModal(false);
