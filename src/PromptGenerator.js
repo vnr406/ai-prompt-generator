@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 const options = {
@@ -18,6 +17,7 @@ export default function PromptGenerator() {
   const [isPro, setIsPro] = useState(false);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [selected, setSelected] = useState({
     visualType: "", cameraStyle: "", cinematicRef: "", texture: "", hallucination: "",
@@ -66,6 +66,8 @@ export default function PromptGenerator() {
       localStorage.setItem("proUser", "true");
       setIsPro(true);
       setShowUnlockModal(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 5000);
     } else {
       alert("Invalid unlock code. Please check your purchase confirmation.");
     }
@@ -90,6 +92,12 @@ export default function PromptGenerator() {
           <strong>Want full access?</strong><br />
           Unlock Pro for a one-time $7.99 and get all categories, updates & features for life.<br />
           <button onClick={() => setShowUnlockModal(true)} className="mt-2 underline text-blue-400">Enter Unlock Code</button>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div className="mb-6 p-4 bg-green-800 text-green-200 rounded text-sm text-center">
+          ✅ <strong>Pro Unlocked!</strong> You now have full access to all categories and features.
         </div>
       )}
 
@@ -133,3 +141,4 @@ export default function PromptGenerator() {
     </div>
   );
 }
+
